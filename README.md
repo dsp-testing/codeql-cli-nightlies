@@ -1,1 +1,3 @@
-# codeql-cli-nightlies
+# CodeQL Nightly Releases
+
+This repository is used by the CodeQL team to distribute unstable nightly releases of the CodeQL CLI. These releases are intended for internal testing only. Unless you have been directed to use a release in this repository by a GitHub employee, it is likely you do not want to use the releases here and should instead use the more stable public releases from https://github.com/github/codeql-cli-binaries.
