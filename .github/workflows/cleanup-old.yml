@@ -17,6 +17,6 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         shell: bash
         run: |
-          RELEASES=`gh release list --repo dsp-testing/codeql-cli-nightlies | sed '1,10d' | cut -f 3`
+          RELEASES=`gh release list --repo dsp-testing/codeql-cli-nightlies | grep "Pre-release" | sed '1,10d' | cut -f 3`
           echo "$RELEASES" | awk NF | tr '\n' '\0' | xargs --no-run-if-empty -0 -n1 gh release delete --repo dsp-testing/codeql-cli-nightlies --yes
           echo "$RELEASES" | awk NF | sed 's/^/\/repos\/dsp-testing\/codeql-cli-nightlies\/git\/refs\/tags\//' | tr '\n' '\0' | xargs --no-run-if-empty -0 -n1 gh api -X DELETE --silent
