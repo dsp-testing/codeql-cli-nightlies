@@ -17,6 +17,8 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         shell: bash
         run: |
-          RELEASES=`gh api --paginate repos/dsp-testing/codeql-cli-nightlies/releases --jq 'map(select(.prerelease == true)).[90:].[] | .tag_name'`
-          echo "$RELEASES" | awk NF | tr '\n' '\0' | xargs --no-run-if-empty -0 -n1 gh release delete --repo dsp-testing/codeql-cli-nightlies --yes
-          echo "$RELEASES" | awk NF | sed 's/^/\/repos\/dsp-testing\/codeql-cli-nightlies\/git\/refs\/tags\//' | tr '\n' '\0' | xargs --no-run-if-empty -0 -n1 gh api -X DELETE --silent
+          # The GitHub API returns results in reverse chronological order, so `[90:]` captures the
+          # 91st and older releases which we want to delete.
+          RELEASES_TO_DELETE=`gh api --paginate repos/dsp-testing/codeql-cli-nightlies/releases --jq 'map(select(.prerelease == true)).[90:].[] | .tag_name'`
+          echo "$RELEASES_TO_DELETE" | awk NF | tr '\n' '\0' | xargs --no-run-if-empty -0 -n1 gh release delete --repo dsp-testing/codeql-cli-nightlies --yes
+          echo "$RELEASES_TO_DELETE" | awk NF | sed 's/^/\/repos\/dsp-testing\/codeql-cli-nightlies\/git\/refs\/tags\//' | tr '\n' '\0' | xargs --no-run-if-empty -0 -n1 gh api -X DELETE --silent
